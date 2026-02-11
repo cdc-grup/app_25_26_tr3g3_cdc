@@ -1,86 +1,86 @@
 # QA & Physical Testing Protocol: Circuit Copilot
 
-## 1. El desafío del entorno
+## 1. The challenge of the environment
 
-Esta aplicación no se puede validar solo con simuladores. El Circuit de Barcelona-Catalunya presenta condiciones hostiles para el hardware móvil:
+This application cannot be validated with simulators alone. The Circuit de Barcelona-Catalunya presents hostile conditions for mobile hardware:
 
-1. **Luz Solar Directa:** Afecta a la visión de pantalla y a los sensores de la cámara (AR).
-2. **Interferencia Magnética:** Las tribunas son de acero y hormigón, lo que descalibra la brújula digital.
-3. **Sombra de GPS (Multipath):** Las estructuras altas rebotan la señal GPS.
-4. **Saturación de Red:** 100.000 personas compitiendo por el ancho de banda 4G/5G.
+1. **Direct Sunlight:** Affects screen visibility and camera sensors (AR).
+2. **Magnetic Interference:** The grandstands are made of steel and concrete, which decalibrates the digital compass.
+3. **GPS Shadow (Multipath):** High structures bounce the GPS signal.
+4. **Network Saturation:** 100,000 people competing for 4G/5G bandwidth.
 
-## 2. Fase 1: Simulaciones de Laboratorio (Office)
+## 2. Phase 1: Laboratory Simulations (Office)
 
-*Antes de ir al circuito, verifica esto:*
+*Before going to the circuit, check this:*
 
-| Test Case | Acción | Resultado Esperado |
+| Test Case | Action | Expected Result |
 | --- | --- | --- |
-| **GPX Mocking** | Cargar un archivo `.gpx` con una vuelta completa al circuito en el emulador. | El punto azul se mueve suavemente por el trazado sin saltos. |
-| **Network Throttling** | Configurar el móvil en "2G / Edge" (Developer settings). | El mapa base carga (porque está en caché offline) y la ruta se calcula en <3s. |
-| **Compass Noise** | Agitar el móvil violentamente mientras se usa AR. | Las flechas deben intentar mantenerse estables, no girar como locas. |
+| **GPX Mocking** | Load a `.gpx` file with a complete lap of the circuit in the emulator. | The blue dot moves smoothly along the track without jumps. |
+| **Network Throttling** | Configure the mobile to "2G / Edge" (Developer settings). | The base map loads (because it is in offline cache) and the route is calculated in <3s. |
+| **Compass Noise** | Shake the mobile violently while using AR. | Arrows should try to stay stable, not spin like crazy. |
 
-## 3. Fase 2: Field Testing (On-Site)
+## 3. Phase 2: Field Testing (On-Site)
 
-*Pruebas obligatorias en el terreno real.*
+*Mandatory tests on real terrain.*
 
-### A. Test de "La Tribuna Metálica" (Interferencia Magnética)
+### A. "The Metal Grandstand" Test (Magnetic Interference)
 
-**Contexto:** Las brújulas de los móviles fallan cerca de grandes masas de metal.
+**Context:** Mobile compasses fail near large masses of metal.
 
-* **Lugar:** Debajo de la Tribuna Principal o frente a la reja de la recta.
-* **Acción:** Abrir el Modo AR.
-* **Observación:** ¿Hacia dónde apunta la flecha?
-* **Fallo Crítico:** La flecha apunta a la pared en lugar del camino.
-* **Solución:** Si falla, la app debe detectar `compass_accuracy_low` y sugerir: *"Aléjate 2 metros de la estructura metálica"* o cambiar a Mapa 2D automáticamente.
+* **Location:** Under the Main Grandstand or in front of the straight's fence.
+* **Action:** Open AR Mode.
+* **Observation:** Where is the arrow pointing?
+* **Critical Failure:** The arrow points to the wall instead of the path.
+* **Solution:** If it fails, the app must detect `compass_accuracy_low` and suggest: *"Move 2 meters away from the metal structure"* or switch to 2D Map automatically.
 
-### B. Test de "Multipath" (Rebote de señal GPS)
+### B. "Multipath" Test (GPS signal bounce)
 
-**Contexto:** La señal GPS rebota en las gradas y el móvil cree que estás en la pista.
+**Context:** The GPS signal bounces off the stands and the mobile thinks you are on the track.
 
-Opción visual recomendada:
+Recommended visual option:
 
-* **Lugar:** Pasillo estrecho entre Tribuna G y Tribuna H.
-* **Acción:** Caminar en línea recta.
-* **Observación:** Mirar si el avatar en el mapa salta de un lado a otro (Zig-Zag).
-* **Validación:** El algoritmo de "Map Matching" (Snap-to-road) debe mantener al usuario en el camino peatonal, ignorando los saltos de coordenadas imposibles.
+* **Location:** Narrow corridor between Grandstand G and Grandstand H.
+* **Action:** Walk in a straight line.
+* **Observation:** See if the avatar on the map jumps from side to side (Zig-Zag).
+* **Validation:** The "Map Matching" (Snap-to-road) algorithm must keep the user on the pedestrian path, ignoring impossible coordinate jumps.
 
-### C. Test de "Luz Solar Extrema" (AR Visibility)
+### C. "Extreme Sunlight" Test (AR Visibility)
 
-**Contexto:** El sol directo "ciega" la cámara y sobrecalienta el móvil.
+**Context:** Direct sun "blinds" the camera and overheats the mobile.
 
-* **Hora:** 12:00 PM - 14:00 PM (Sol cenital).
-* **Acción:** Usar AR durante 5 minutos continuos apuntando al asfalto.
-* **Riesgos a medir:**
+* **Time:** 12:00 PM - 02:00 PM (Zenith Sun).
+* **Action:** Use AR for 5 continuous minutes pointing at the asphalt.
+* **Risks to measure:**
 
-1. **Contrast Loss:** ¿Se ven las flechas virtuales sobre el asfalto gris claro? (Deben tener borde negro o sombra fuerte).
-2. **Tracking Lost:** Si el suelo no tiene textura (es muy liso y brillante), ViroReact perderá el anclaje.
-3. **Overheat:** ¿El móvil lanza aviso de temperatura?
+1. **Contrast Loss:** Are the virtual arrows visible on the light gray asphalt? (They should have a black border or strong shadow).
+2. **Tracking Lost:** If the ground has no texture (it is very smooth and shiny), ViroReact will lose its anchor.
+3. **Overheat:** Does the mobile issue a temperature warning?
 
-## 4. Fase 3: Stress Testing (La simulación de carrera)
+## 4. Phase 3: Stress Testing (The race simulation)
 
-### El "Walkthrough" de 1km
+### The 1km Walkthrough
 
-Un tester debe realizar este recorrido completo sin cerrar la app:
+A tester must complete this entire route without closing the app:
 
-1. **Inicio:** Parking F.
-2. **Destino:** Asiento en Tribuna N.
-3. **Condiciones:**
+1. **Start:** Parking F.
+2. **Destination:** Seat in Grandstand N.
+3. **Conditions:**
 
-* Brillo de pantalla al 100%.
-* Datos móviles desactivados (Simulando colapso de red).
-* Bluetooth activado (Auriculares).
+* Screen brightness at 100%.
+* Mobile data disabled (Simulating network collapse).
+* Bluetooth enabled (Headphones).
 
-4. **Criterios de Aceptación:**
+4. **Acceptance Criteria:**
 
-* **Batería:** No debe bajar más del 8% en este trayecto (~15 mins).
-* **Navegación:** No debe requerir reiniciar la app.
-* **Audio:** Las instrucciones de voz ("Gira a la derecha") deben oírse sobre el ruido ambiental (simular ruido de motores o gentío).
+* **Battery:** Should not drop more than 8% during this journey (~15 mins).
+* **Navigation:** Should not require restarting the app.
+* **Audio:** Voice instructions ("Turn right") must be audible over ambient noise (simulate engine noise or crowds).
 
-## 5. Reporte de Bugs (Formato Estandarizado)
+## 5. Bug Reporting (Standardized Format)
 
-Cuando los testers reporten fallos desde el circuito, deben incluir:
+When testers report failures from the circuit, they must include:
 
-* **Coordenadas Exactas:** (Copia y pega del modo debug).
-* **Estado del Cielo:** (Soleado / Nublado / Lluvia). *La lluvia afecta a la pantalla táctil.*
-* **Orientación del Dispositivo:** (Vertical / Horizontal).
-* **Captura de Pantalla del "AR Debug World":** (Ver los puntos de anclaje virtuales que detecta el sistema).
+* **Exact Coordinates:** (Copy and paste from debug mode).
+* **Sky Conditions:** (Sunny / Cloudy / Rain). *Rain affects the touchscreen.*
+* **Device Orientation:** (Vertical / Horizontal).
+* **AR Debug World Screenshot:** (See the virtual anchor points detected by the system).

@@ -9,11 +9,11 @@
 
 ## 2. REST Endpoints (HTTP)
 
-### 🟢 Auth & Onboarding (US1, US2)
+### Auth & Onboarding (US1, US2)
 
 #### `POST /auth/ticket-sync`
 
-Vincula un tiquet físico/digital al usuario y extrae su metadatos de acceso.
+Links a physical/digital ticket to the user and extracts its access metadata.
 
 * **Body:**
 
@@ -41,11 +41,9 @@ Vincula un tiquet físico/digital al usuario y extrae su metadatos de acceso.
 
 ```
 
-
-
 #### `PATCH /users/me/parking` (US34)
 
-Guarda la ubicación del coche para la salida.
+Saves the car's location for the exit.
 
 * **Body:**
 
@@ -57,13 +55,11 @@ Guarda la ubicación del coche para la salida.
 
 ```
 
-
-
-### 🔵 Navigation & Map Data (US6, US9)
+### Navigation & Map Data (US6, US9)
 
 #### `GET /pois`
 
-Obtiene los Puntos de Interés estáticos. Cacheable en el dispositivo (Local SQLite).
+Gets the static Points of Interest. Cacheable on the device (Local SQLite).
 
 * **Query Params:** `?category=toilet,food&changed_since=2023-10-01`
 * **Response (200 OK):**
@@ -87,13 +83,11 @@ Obtiene los Puntos de Interés estáticos. Cacheable en el dispositivo (Local SQ
 
 ```
 
-
-
-### 🟣 Smart Routing (use US4, US7)
+### Smart Routing (use US4, US7)
 
 #### `POST /navigation/route`
 
-Solicita una ruta peatonal considerando la congestión actual.
+Requests a pedestrian route considering the current congestion.
 
 * **Body:**
 
@@ -126,11 +120,11 @@ Solicita una ruta peatonal considerando la congestión actual.
 **Protocol:** Socket.io
 **Namespace:** `/live-track`
 
-### 📤 Client Emits (Lo que envía el móvil)
+### Client Emits (What the mobile sends)
 
 #### `user:update_location` (Throttled)
 
-Se envía máx. 1 vez cada 30s o si se mueve >20m.
+Sent max. 1 time every 30s or if moved >20m.
 
 * **Payload:**
 
@@ -145,19 +139,17 @@ Se envía máx. 1 vez cada 30s o si se mueve >20m.
 
 ```
 
-
-
 #### `group:join`
 
-Para unirse a un grupo de amigos.
+To join a group of friends.
 
 * **Payload:** `{ "group_code": "FAST-CARS-24" }`
 
-### 📥 Server Emits (Lo que recibe el móvil)
+### 📥 Server Emits (What the mobile receives)
 
 #### `group:locations`
 
-Posiciones de los amigos en el mapa.
+Friends' positions on the map.
 
 * **Payload:**
 
@@ -171,7 +163,7 @@ Posiciones de los amigos en el mapa.
 
 #### `race:status` (US11)
 
-Datos de carrera en vivo (Low Latency).
+Live race data (Low Latency).
 
 * **Payload:**
 
@@ -187,14 +179,14 @@ Datos de carrera en vivo (Low Latency).
 
 ## 4. Error Handling Standards
 
-Todas las respuestas de error deben seguir este formato para que el Frontend muestre mensajes consistentes:
+All error responses must follow this format so the Frontend can display consistent messages:
 
 ```json
 {
   "error": {
     "code": "TICKET_INVALID",
     "message": "The QR code implies a generic entry, please select zone manually.",
-    "user_friendly_message": "No hem pogut detectar la teva zona. Si us plau, selecciona-la manualment.",
+    "user_friendly_message": "We could not detect your zone. Please select it manually.",
     "status": 400
   }
 }

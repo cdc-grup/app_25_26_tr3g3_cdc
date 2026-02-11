@@ -2,7 +2,7 @@
 
 ## 1. High-Level Flow (Global States)
 
-Este diagrama define el ciclo de vida macro de la aplicación.
+This diagram defines the macro lifecycle of the application.
 
 ```mermaid
 stateDiagram-v2
@@ -31,15 +31,15 @@ stateDiagram-v2
 
 ## 2. The Navigation Engine (Complex Logic)
 
-Aquí es donde ocurre la magia (y la complejidad). Definimos cómo entra y sale el usuario del modo AR y cómo gestionamos la pérdida de conexión.
+This is where the magic (and complexity) happens. We define how the user enters and exits AR mode and how we handle connection loss.
 
-### Lógica de Transición AR/2D
+### AR/2D Transition Logic
 
-* **Trigger Principal:** Giroscopio (Phone Tilt).
-* Si `pitch > 60°` (móvil vertical) -> **Activar AR**.
-* Si `pitch < 30°` (móvil plano) -> **Volver a 2D**.
+* **Main Trigger:** Gyroscope (Phone Tilt).
+* If `pitch > 60°` (mobile vertical) -> **Activate AR**.
+* If `pitch < 30°` (mobile flat) -> **Return to 2D**.
 
-* **Trigger Secundario:** Botón manual "Ver en AR".
+* **Secondary Trigger:** Manual "View in AR" button.
 
 ```mermaid
 stateDiagram-v2
@@ -65,7 +65,7 @@ stateDiagram-v2
         Route_2D --> Route_AR: Lift Phone (Pitch > 60°)
         Route_AR --> Route_2D: Lower Phone (Pitch < 30°)
         
-        -- Eventos Externos --
+        -- External Events --
         Route_2D --> CongestionAlert: Socket: "Crowd Ahead"
         CongestionAlert --> ComputingRoute: Auto-Reroute
     }
@@ -84,51 +84,51 @@ stateDiagram-v2
 
 ```
 
-## 3. Descripción de Estados Clave
+## 3. Key States Description
 
 ### A. `PreRaceMode` (US3)
 
-* **Objetivo:** Planificación y hype.
-* **Restricciones:** No gasta batería buscando GPS de alta precisión.
-* **UI:** Muestra el horario (`events_schedule`), accesos recomendados y descarga de mapas offline.
-* **Salida:** Se convierte en `LiveMode` automáticamente el día de la carrera a las 06:00 AM.
+* **Objective:** Planning and hype.
+* **Restrictions:** Does not consume battery searching for high-precision GPS.
+* **UI:** Shows the schedule (`events_schedule`), recommended access points, and offline map downloads.
+* **Exit:** Automatically switches to `LiveMode` on race day at 06:00 AM.
 
 ### B. `Navigation_Active` (US4, US7, US8)
 
-Es el estado más crítico. Consume mucha batería y datos.
+It is the most critical state. Consumes a lot of battery and data.
 
-* **Sub-estado `ComputingRoute`:**
+* **Sub-state `ComputingRoute`:**
 
-1. Consulta al servidor (API) por congestión.
-2. Si servidor falla/tarda > 3s, calcula ruta local (Plan B).
+1. Query the server (API) for congestion.
+2. If server fails/takes > 3s, calculate local route (Plan B).
 
-* **Sub-estado `Route_AR`:**
-* **Calibración:** Al levantar el móvil, ViroReact necesita 1-2 segundos para anclar el suelo. Debes mostrar un loader "Detectando suelo...".
-* **Safety Lock:** Si el usuario camina muy rápido (>10km/h), la AR se bloquea y muestra "Por tu seguridad, mira al frente".
+* **Sub-state `Route_AR`:**
+* **Calibration:** When lifting the phone, ViroReact needs 1-2 seconds to anchor the ground. You must show a loader "Detecting ground...".
+* **Safety Lock:** If the user walks too fast (>10km/h), the AR is blocked and shows "For your safety, look ahead".
 
 ### C. `Offline_Mode` (US33)
 
-Este es un "Estado Superpuesto" (puede ocurrir en cualquier momento).
+This is an "Overlaid State" (can occur at any time).
 
-* **Comportamiento:**
-* La API de rutas (`POST /navigation/route`) se bloquea.
-* Se activa el motor de rutas local (`Mapbox.DirectionsFactory`).
-* Se ocultan los marcadores de "Amigos" (ya que no se pueden actualizar).
-* Se muestra un banner amarillo: "Modo Sin Conexión - Rutas básicas activas".
+* **Behavior:**
+* The route API (`POST /navigation/route`) is blocked.
+* The local route engine (`Mapbox.DirectionsFactory`) is activated.
+* "Friends" markers are hidden (since they cannot be updated).
+* A yellow banner is shown: "Offline Mode - Basic routes active".
 
-## 4. Edge Cases (Casos Límite a programar)
+## 4. Edge Cases (Boundary cases to program)
 
-1. **"El usuario fantasma":**
+1. **"The ghost user":**
 
-* *Situación:* El GPS dice que el usuario está a 500km del circuito (error de inicio).
-* *Acción:* El diagrama de estados debe impedir entrar en `Navigation_Active`. Mostrar modal: "Parece que no estás en el circuito".
+* *Situation:* The GPS says the user is 500km from the circuit (start error).
+* *Action:* The state diagram must prevent entering `Navigation_Active`. Show modal: "It seems you are not at the circuit".
 
-2. **"El bucle de congestión":**
+2. **"The congestion loop":**
 
-* *Situación:* El servidor dice que la ruta A está llena. La app calcula la ruta B. A los 10 segundos, la ruta B también se llena.
-* *Acción:* Definir un `debounce` en el estado `ReRouting`. No recalcular más de 1 vez por minuto para no marear al usuario.
+* *Situation:* The server says route A is full. The app calculates route B. 10 seconds later, route B also becomes full.
+* *Action:* Define a `debounce` in the `ReRouting` state. Do not recalculate more than once per minute to avoid confusing the user.
 
-3. **"Batería Crítica":**
+3. **"Critical Battery":**
 
-* *Situación:* Batería < 15%.
-* *Acción:* Forzar transición de `Route_AR` a `Route_2D` y deshabilitar el sensor de giroscopio para ahorrar energía.
+* *Situation:* Battery < 15%.
+* *Action:* Force transition from `Route_AR` to `Route_2D` and disable the gyroscope sensor to save energy.
