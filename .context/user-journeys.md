@@ -1,24 +1,20 @@
-# User Journeys: The Spectator's Race Day
+# User Journeys
 
-## Phase 1: Preparation (US2, US3)
+## Journey: The Efficient Exit (Traffic Management)
 
-- User downloads the app days before.
-- Checks the `events_schedule` to plan when to arrive.
-- Explores the map in "Pre-Race Mode" to see food truck locations.
+- **Context:** The race has just finished. 100,000 people are leaving.
+- **Action:** User opens app to find their car (saved in US34).
+- **System:**
+    1. Checks user's saved parking coordinates.
+    2. Checks server for "Gate Congestion Levels".
+    3. Directs user to a secondary exit gate that is 5 minutes longer to walk but has 20 minutes less queue.
+    4. Uses AR arrows to guide them through the crowd.
 
-## Phase 2: Arrival & Onboarding (US1, US4)
+## Journey: The Group Reunion
 
-- User arrives at the circuit and scans the QR ticket.
-- The app automatically sets a route from their current GPS (US5) to their "Butaca" (Seat).
-- If the main tunnel is crowded, the system triggers US7 (Smart Route) and redirects them.
-
-## Phase 3: During the Race (US8, US10, US11)
-
-- User wants to find a friend. They open the "Social" tab (US10).
-- On the way to meet them, the user gets lost and lifts the phone: AR Mode (US8) shows arrows on the floor.
-- While walking, they check the "Live Race Data" (US11) to see who is leading.
-
-## Phase 4: Post-Event (US34 from Image)
-
-- User saves car location with one click.
-- App provides a guided route back to the parking lot after the podium ceremony.
+- **Context:** User A is at Tribuna G, User B is at Food Truck Zone.
+- **Action:** User A taps "Find B".
+- **System:**
+    1. Server pushes User B's last throttled location (via Socket.io).
+    2. App draws a dynamic line on the map.
+    3. As they get closer (<50m), App suggests: "Switch to AR to spot your friend in the crowd."

@@ -1,33 +1,29 @@
--- US1 & US2: Profile & Tickets
+-- Enable Spatial extensions
+CREATE EXTENSION IF NOT EXISTS postgis;
 
-CREATE TABLE users (
-    id UUID PRIMARY KEY,
-    ticket_id VARCHAR(255) NULL,
-    zone VARCHAR(50), -- US1
-    gate VARCHAR(10),
-    seat VARCHAR(20),
-    is_pre_race_user BOOLEAN DEFAULT true -- US2
-);
-
--- US3 & US11: Events & Race Data
-CREATE TABLE events_schedule (
-    id SERIAL PRIMARY KEY,
-    title VARCHAR(255),
-    start_time TIMESTAMP,
-    description TEXT
-);
-
--- US6 & US9: POIs (Points of Interest)
+-- POIs (Static Data - Downloaded to device)
 CREATE TABLE pois (
     id SERIAL PRIMARY KEY,
-    name_ca VARCHAR(100),
-    category ENUM('toilet', 'food', 'merch', 'medical', 'gate'),
-    location GEOGRAPHY(POINT, 4326)
+    name VARCHAR(100),
+    type ENUM('toilet', 'food', 'gate', 'medical', 'parking'),
+    geom GEOGRAPHY(Point, 4326), -- Use GEOGRAPHY for accurate meter calculations
+    metadata JSONB -- Menus, opening hours, etc.
 );
 
--- US10: Social Tracking
-CREATE TABLE friend_groups (
-    group_id UUID PRIMARY KEY,
-    user_id UUID REFERENCES users(id),
-    shared_at TIMESTAMP DEFAULT NOW()
+-- Telemetry (Dynamic Data - High writes, ephemeral)
+-- Use a Time-Series approach or Redis for live data, flushed here for analytics
+CREATE TABLE user_telemetry (
+    user_id UUID,
+    geom GEOGRAPHY(Point, 4326),
+    timestamp TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Navigation Graph (Nodes & Edges for Routing)
+CREATE TABLE route_edges (
+    id SERIAL PRIMARY KEY,
+    source_node INT,
+    target_node INT,
+    geom GEOMETRY(LineString, 4326),
+    base_weight INT, -- Time in seconds to cross normally
+    current_congestion_weight INT DEFAULT 0 -- Dynamic update from server
 );
