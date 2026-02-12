@@ -1,5 +1,5 @@
 /**
- * Shared TypeScript interfaces for Circuit Copilot
+ * Basic TypeScript interfaces for Circuit Copilot (Sprint 0)
  */
 
 export interface TicketInfo {
@@ -22,5 +22,4 @@ export interface POI {
   name: string;
   category: POICategory;
   coordinates: [number, number];
-  wait_time_minutes?: number;
 }

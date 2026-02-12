@@ -1,5 +1,5 @@
 {
-  "name": "@app/server",
+  "name": "@app/api",
   "version": "1.0.0",
   "description": "Circuit Copilot Backend API",
   "main": "index.ts",
