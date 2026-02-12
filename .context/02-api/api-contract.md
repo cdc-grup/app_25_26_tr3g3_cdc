@@ -1,4 +1,4 @@
-# Contracte de l'API v1.0 - Circuit Copilot
+# Contracte de l'API v1.0 - Circuit Copilot API
 
 ## 1. Estàndards Generals
 

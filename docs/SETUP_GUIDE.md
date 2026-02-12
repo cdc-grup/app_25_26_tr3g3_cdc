@@ -23,7 +23,7 @@ Utilitzem **Turborepo** / Workspaces. No cal fer `npm install` a cada carpeta.
 /
 ├── apps/
 │   ├── mobile/         # Aplicació Expo (React Native)
-│   └── server/        # API Node.js + Express
+│   └── api/           # API Node.js + Express
 ├── packages/
 │   ├── shared/         # Tipus TypeScript compartits (@app/shared)
 │   └── database/       # Esquema de Prisma/Sequelize i Migracions
@@ -50,7 +50,7 @@ pnpm install
 
 Has de crear fitxers `.env` a les carpetes específiques de l'aplicació. **No enviïs aquests fitxers al repositori.**
 
-### Backend (`apps/backend/.env`)
+### Backend (`apps/api/.env`)
 
 ```ini
 PORT=3000
@@ -113,12 +113,12 @@ npx expo prebuild
 
 > **Nota:** Aquesta ordre instal·larà l'aplicació "Development Build" al teu dispositiu. Un cop instal·lada, només caldrà que executis `npx expo start` en el futur per iniciar el Metro Bundler.
 
-## Pas 5: Executar el Backend
+## Pas 5: Executar l'API
 
 Obre un nou terminal.
 
 ```bash
-cd apps/backend
+cd apps/api
 npm run dev
 ```
 
