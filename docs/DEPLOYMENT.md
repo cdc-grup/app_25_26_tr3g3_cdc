@@ -1,128 +1,121 @@
-# Deployment Guide: Circuit Copilot
+# Guia de Desplegament: Circuit Copilot
 
-This document outlines the production deployment process for both the Backend API and the Mobile Application.
+Aquest document descriu el procés de desplegament a producció tant per a l'API del Backend com per a l'aplicació mòbil.
 
-## 1. Backend Deployment (Node.js + PostGIS)
+## 1. Desplegament del Backend (Node.js + PostGIS)
 
-The backend must be deployed to a provider that supports **Docker Containers** and **Persistent Volumes** for PostgreSQL.
+El backend s'ha de desplegar en un proveïdor que admeti **Contenidors Docker** i **Volums Persistents** per a PostgreSQL.
 
-### Containerization
+### Contenidorització
 
-We use the Dockerfile located in `apps/backend/Dockerfile`.
+Utilitzem el Dockerfile situat a `apps/backend/Dockerfile`.
 
-* **Port:** 3000 (Express & WebSockets).
-* **Environment:** Ensure the provider supports sticky sessions or WebSockets (LB configuration).
+* **Port:** 3000 (Express i WebSockets).
+* **Entorn:** Assegura't que el proveïdor admeti sessions fixes o WebSockets (configuració de balancejador de càrrega).
 
-### Production Infrastructure Requirements
+### Requisits d'Infraestructura de Producció
 
-1. **Database:** PostgreSQL 15+ with the **PostGIS** extension enabled.
-2. **SSL/TLS:** Mandatory for mobile app communication (HTTPS/WSS).
-3. **Static IP/Domain:** Needed for the Mobile App's API endpoint.
+1. **Base de dades:** PostgreSQL 15+ amb l'extensió **PostGIS** activada.
+2. **SSL/TLS:** Obligatori per a la comunicació de l'aplicació mòbil (HTTPS/WSS).
+3. **IP Estàtica/Domini:** Necessari per al punt final de l'API de l'aplicació mòbil.
 
-### Environment Variables (Production)
+### Variables d'Entorn (Producció)
 
-| Variable | Description |
+| Variable | Descripció |
 | --- | --- |
-| `DATABASE_URL` | Connection string (e.g., `postgres://user:pass@host:5432/db`) |
-| `JWT_SECRET` | A long, random string for signing tokens. |
-| `CORS_ORIGIN` | Set to your domain or `*` (restricted recommended). |
+| `DATABASE_URL` | Cadena de connexió (ex: `postgres://user:pass@host:5432/db`) |
+| `JWT_SECRET` | Una cadena llarga i aleatòria per signar tokens. |
+| `CORS_ORIGIN` | Estableix el teu domini o `*` (es recomana restringit). |
 | `NODE_ENV` | `production` |
 
-### Deployment Flow (Example: Railway / DigitalOcean App Platform)
+### Flux de Desplegament (Exemple: Railway / DigitalOcean App Platform)
 
-1. Connect your GitHub Repository.
-2. Set the **Root Directory** to `/`.
-3. Set the **Build Command:** `npm install && npm run build --filter backend`.
-4. Set the **Start Command:** `npm run start --filter backend`.
-5. Apply database migrations: `npx prisma migrate deploy` (or equivalent).
+1. Connecta el teu repositori de GitHub.
+2. Estableix el **Directori Arrel** a `/`.
+3. Estableix l'**Ordre de Construcció (Build Command):** `npm install && npm run build --filter backend`.
+4. Estableix l'**Ordre d'Inici (Start Command):** `npm run start --filter backend`.
+5. Aplica les migracions de la base de dades: `npx prisma migrate deploy` (o equivalent).
 
-## 2. Mobile App Deployment (iOS & Android)
+## 2. Desplegament de l'Aplicació Mòbil (iOS i Android)
 
-We use **EAS (Expo Application Services)** to manage builds and submissions.
+Utilitzem **EAS (Expo Application Services)** per gestionar les construccions i els enviaments.
 
-### Prerequisites
+### Prerequisits
 
-1. **Apple Developer Account** (for iOS).
-2. **Google Play Console Account** (for Android).
-3. **Mapbox Production Token:** Ensure your Mapbox token is restricted to your production `bundleIdentifier` / `packageName`.
+1. **Compte de Desenvolupador d'Apple** (per a iOS).
+2. **Compte de Google Play Console** (per a Android).
+3. **Token de Producció de Mapbox:** Assegura't que el teu token de Mapbox estigui restringit al teu `bundleIdentifier` / `packageName` de producció.
 
-### Build Profiles (eas.json)
+### Perfils de Construcció (eas.json)
 
-Ensure your `eas.json` has a production profile:
+Assegura't que el teu `eas.json` tingui un perfil de producció:
 
 ```json
 {
   "build": {
     "production": {
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://api.yourdomain.com/v1",
-        "EXPO_PUBLIC_SOCKET_URL": "https://api.yourdomain.com"
+        "EXPO_PUBLIC_API_URL": "https://api.tudomini.com/v1",
+        "EXPO_PUBLIC_SOCKET_URL": "https://api.tudomini.com"
       }
     }
   }
 }
-
 ```
 
-### Building for Stores
+### Construcció per a les Botigues (Stores)
 
-Run the following commands from `apps/mobile`:
+Executa les ordres següents des de `apps/mobile`:
 
-**For Android (.aab):**
+**Per a Android (.aab):**
 
 ```bash
 eas build --platform android --profile production
-
 ```
 
-**For iOS (.ipa):**
+**Per a iOS (.ipa):**
 
 ```bash
 eas build --platform ios --profile production
-
 ```
 
-### Submitting to Stores
+### Enviament a les Botigues
 
-Once the build is finished, you can submit directly from the CLI:
+Un cop finalitzada la construcció, pots enviar-la directament des de la CLI:
 
 ```bash
 eas submit --platform ios
 eas submit --platform android
-
 ```
 
-## 3. Post-Deployment Verification (Smoke Tests)
+## 3. Verificació Post-Desplegament (Smoke Tests)
 
-After deployment, perform the following checks:
+Després del desplegament, realitza les comprovacions següents:
 
-1. **Connectivity:** Open the production URL in a browser/Postman. It should return a `200 OK` or a JSON health check.
-2. **WebSocket Handshake:** Verify that the mobile app can establish a `wss://` connection.
-* *Common Issue:* Load balancers like Nginx often need explicit config to allow `Upgrade` headers for WebSockets.
+1. **Connectivitat:** Obre la URL de producció en un navegador o Postman. Ha de retornar un `200 OK` o una prova d'estat (health check) en JSON.
+2. **Aperitiu de mans (Handshake) de WebSocket:** Verifica que l'aplicació mòbil pugui establir una connexió `wss://`.
+* *Problema comú:* Els balancejadors de càrrega com Nginx sovint necessiten una configuració explícita per permetre les capçaleres `Upgrade` per als WebSockets.
 
+3. **Comprovació de PostGIS:** Executa una consulta de mostra de "POI més proper" a través de l'API per assegurar-te que l'extensió de la base de dades està activa.
+4. **Recursos de Mapbox:** Assegura't que el mapa es carrega a la versió de producció (comprova que el Token de Producció/ID del Paquet sigui vàlid).
 
-3. **PostGIS Check:** Run a sample "Nearest POI" query via the API to ensure the database extension is active.
-4. **Mapbox Assets:** Ensure the map loads in the production build (checks for valid Production Token/Bundle ID).
+## Canalització (Pipeline) de CI/CD (GitHub Actions)
 
-## CI/CD Pipeline (GitHub Actions)
-
-We recommend a pipeline that triggers on `push` to the `main` branch:
+Recomanem una canalització que s'activi en fer un `push` a la branca `main`:
 
 ```mermaid
 graph LR
-    A[Push to Main] --> B{Lint & Test}
-    B -- Pass --> C[Build Docker Image]
-    C --> D[Deploy to Cloud]
-    B -- Pass --> E[EAS Update - OTA]
-    E --> F[Users receive JS update]
-
+    A[Push a Main] --> B{Lint i Test}
+    B -- Passa --> C[Construir Imatge Docker]
+    C --> D[Desplegar al Núvol]
+    B -- Passa --> E[Actualització EAS - OTA]
+    E --> F[Els usuaris reben actualització JS]
 ```
 
-### Over-the-Air (OTA) Updates
+### Actualitzacions Over-the-Air (OTA)
 
-For small bug fixes (JavaScript/Assets only), use **Expo Updates** to skip the App Store review process:
+Per a petites correccions d'errors (només JavaScript/Recursos), utilitza **Expo Updates** per saltar-te el procés de revisió de l'App Store:
 
 ```bash
 eas update --branch production --message "Fix: toilet location coordinates"
-
 ```

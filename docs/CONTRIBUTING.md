@@ -1,83 +1,82 @@
-# Contributing to Circuit Copilot
+# Contribuir a Circuit Copilot
 
-First off, thank you for helping us build the ultimate race-day companion! To maintain a high-quality codebase and a smooth workflow in our monorepo, please follow these guidelines.
+En primer lloc, gràcies per ajudar-nos a construir el millor acompanyant per als dies de cursa! Per mantenir una base de codi d'alta qualitat i un flux de treball fluid en el nostre monorepo, segueix aquestes pautes.
 
-## Branching Strategy
+## Estratègia de Brancament (Branching)
 
-We use a **Feature Branch** workflow. Always branch off `main` and merge back via Pull Request.
+Utilitzem un flux de treball de **Branca de Funcionalitat (Feature Branch)**. Crea sempre la branca a partir de `main` i fusiona-la mitjançant una Pull Request.
 
-* **Feature:** `feat/feature-name` (e.g., `feat/ar-arrows`)
-* **Bug Fix:** `fix/bug-name` (e.g., `fix/socket-reconnection`)
-* **Documentation:** `docs/description`
-* **Refactor:** `refactor/component-name`
+* **Funcionalitat:** `feat/feature-name` (ex: `feat/ar-arrows`)
+* **Correcció d'errors (Bug Fix):** `fix/bug-name` (ex: `fix/socket-reconnection`)
+* **Documentació:** `docs/description`
+* **Refactorització:** `refactor/component-name`
 
-## Commit Message Convention
+## Convenció de Missatges de Commit
 
-We follow [Conventional Commits](https://www.conventionalcommits.org/). This allows us to auto-generate changelogs and manage versions easily.
+Seguim els [Commits Convencionals](https://www.conventionalcommits.org/). Això ens permet autogenerar registres de canvis (changelogs) i gestionar versions fàcilment.
 
-**Format:** `<type>(scope): <description>`
+**Format:** `<tipus>(àmbit): <descripció>`
 
 * `feat(mobile): add mapbox user tracking`
 * `fix(api): correct postgis query for nearest toilets`
 * `docs(shared): update user ticket interface`
 * `chore(root): update dependencies`
 
-## Monorepo Workflow (Turborepo)
+## Flux de Treball al Monorepo (Turborepo)
 
-Since we are in a monorepo, pay attention to where you are adding code:
+Com que estem en un monorepo, para atenció a on afegeixes el codi:
 
-1. **Shared Logic:** If a type, interface, or utility is used by both the App and the API, put it in `packages/shared`.
-2. **Scripts:** Use the root `package.json` to run tasks across the whole repo:
-* `npm run dev`: Starts all apps (Backend + Mobile) in parallel.
-* `npm run build`: Builds all packages.
-* `npm run lint`: Runs ESLint across all apps.
+1. **Lògica Compartida:** Si un tipus, interfície o utilitat s'utilitza tant a l'App com a l'API, posa-ho a `packages/shared`.
+2. **Scripts:** Utilitza el `package.json` arrel per executar tasques a tot el repositori:
+* `npm run dev`: Inicia totes les aplicacions (Backend + Mòbil) en paral·lel.
+* `npm run build`: Construeix tots els paquets.
+* `npm run lint`: Executa ESLint a totes les aplicacions.
 
-## Coding Standards
+## Estàndards de Programació
 
 ### TypeScript
 
-* **No `any`:** Use proper typing. If you are unsure, define an interface in `packages/shared`.
-* **Explicit Returns:** Always define the return type of your functions and API endpoints.
+* **No `any`:** Utilitza el tipat correcte. Si no n'estàs segur, defineix una interfície a `packages/shared`.
+* **Retorns Explícits:** Defineix sempre el tipus de retorn de les teves funcions i punts finals de l'API.
 
-### Linting & Formatting
+### Llinting i Format
 
-We use **ESLint** and **Prettier**. Most IDEs will format on save, but you can run it manually:
+Utilitzem **ESLint** i **Prettier**. La majoria dels IDE li donaran format en desar, però pots executar-ho manualment:
 
 ```bash
 npm run lint:fix
-
 ```
 
 ### Git Hooks (Husky)
 
-Before every commit, a pre-commit hook runs to ensure your code:
+Abans de cada commit, s'executa un hook de pre-commit per assegurar que el teu codi:
 
-1. Has no linting errors.
-2. Passes basic tests.
-**Do not bypass these hooks.**
+1. No té errors de linting.
+2. Passa les proves bàsiques.
+**No et saltis aquests hooks.**
 
-## Pull Request (PR) Process
+## Procés de Pull Request (PR)
 
-1. **Update Documentation:** If you add a new API endpoint, update `api-contract.md`. If you change the state logic, update `app-states.md`.
-2. **Self-Review:** Look at your own code for console logs or "TODOs" before opening the PR.
-3. **The "AR" Rule:** If your PR changes AR logic, you **must** include a short video or GIF of the feature working on a physical device in the PR description.
-4. **Reviewers:** At least one other developer must approve the PR before merging to `main`.
+1. **Actualitza la Documentació:** Si afegeixes un nou punt final a l'API, actualitza `api-contract.md`. Si canvies la lògica d'estats, actualitza `app-states.md`.
+2. **Auto-revisió:** Revisa el teu propi codi per si hi ha console logs o "TODOs" abans d'obrir la PR.
+3. **La Regla de l'"AR":** Si la teva PR canvia lògica d'AR, **has d'incloure** un vídeo curt o un GIF de la funcionalitat funcionant en un dispositiu físic a la descripció de la PR.
+4. **Revisors:** Almenys un altre desenvolupador ha d'aprovar la PR abans de fusionar-la a `main`.
 
-## Shared Directory Rules
+## Regles del Directori Compartit (Shared)
 
-When modifying `packages/shared`:
+Quan modifiquis `packages/shared`:
 
-1. Run `npm run build` in the shared folder to ensure the TypeScript declaration files are updated.
-2. Restart the Metro Bundler (Mobile) and the Node Server (Backend) to pick up the changes.
+1. Executa `npm run build` a la carpeta shared per assegurar-te que els fitxers de declaració de TypeScript s'actualitzen.
+2. Reinicia el Metro Bundler (Mòbil) i el Servidor Node (Backend) per recollir els canvis.
 
-## Troubleshooting for Contributors
+## Resolució de Problemes per a Col·laboradors
 
-* **"Type not found in Mobile":** If you added a type in `shared` but the Mobile app doesn't see it, try `npm install` at the root and restart the Expo server.
-* **"Docker Port Conflict":** If you can't start the DB, check if you have another PostgreSQL instance running on port `5432`.
+* **"Tipus no trobat al Mòbil":** Si has afegit un tipus a `shared` però l'app mòbil no el veu, prova `npm install` a l'arrel i reinicia el servidor Expo.
+* **"Conflicte de ports a Docker":** Si no pots iniciar la base de dades, comprova si tens una altra instància de PostgreSQL executant-se al port `5432`.
 
-### **Final Project Status**
+### **Estat Final del Projecte**
 
-You now have a professional-grade documentation suite:
+Ara tens un conjunt de documentació de nivell professional:
 
-* **`.context/`**: The "Source of Truth" for your AI assistant.
-* **`docs/`**: The "Standard Operating Procedures" for your human team.
+* **`.context/`**: La "Font de la Veritat" per al teu assistent d'IA.
+* **`docs/`**: Els "Procediments Operatius Estàndard" per al teu equip humà.

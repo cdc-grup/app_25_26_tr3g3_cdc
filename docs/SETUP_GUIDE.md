@@ -1,170 +1,166 @@
-# Circuit Copilot: Developer Setup Guide
+# Circuit Copilot: Guia de Configuració per a Desenvolupadors
 
-This guide covers the local development environment setup for the **Circuit Copilot** Monorepo.
+Aquesta guia descriu la configuració de l'entorn de desenvolupament local per al monorepo de **Circuit Copilot**.
 
-## Prerequisites
+## Prerequisits
 
-Before cloning the repository, ensure you have the following installed:
+Abans de clonar el repositori, assegura't de tenir instal·lat el següent:
 
-1. **Node.js (LTS)**: v18.0.0 or higher.
-2. **Docker Desktop**: Running and updated (required for PostGIS & Redis).
-3. **Git**: For version control.
-4. **Mobile Development Environment**:
-* **iOS**: Xcode (Mac only).
+1. **Node.js (LTS)**: v18.0.0 o superior.
+2. **Docker Desktop**: En funcionament i actualitzat (necessari per a PostGIS i Redis).
+3. **Git**: Per al control de versions.
+4. **Entorn de Desenvolupament Mòbil**:
+* **iOS**: Xcode (només per a Mac).
 * **Android**: Android Studio + SDK Platform Tools.
 
+5. **Compte de Mapbox**: Necessites un token d'accés públic.
 
-5. **Mapbox Account**: You need a public access token.
+## Estructura del Repositori (Monorepo)
 
-## Repository Structure (Monorepo)
-
-We use **Turborepo** / Workspaces. You don't need to `npm install` in every folder.
+Utilitzem **Turborepo** / Workspaces. No cal fer `npm install` a cada carpeta.
 
 ```text
 /
 ├── apps/
-│   ├── mobile/         # Expo (React Native) App
-│   └── server/        # Node.js + Express API
+│   ├── mobile/         # Aplicació Expo (React Native)
+│   └── server/        # API Node.js + Express
 ├── packages/
-│   ├── shared/         # Shared TypeScript Types (Frontend <-> Backend contract)
-│   └── database/       # Prisma/Sequelize Schema & Migrations
-└── docker-compose.yml  # Orchestrates DB and Redis
-
+│   ├── shared/         # Tipus TypeScript compartits (contracte Frontend <-> Backend)
+│   └── database/       # Esquema de Prisma/Sequelize i Migracions
+└── docker-compose.yml  # Orquestra la base de dades i Redis
 ```
 
-## Step 1: Installation
+## Pas 1: Instal·lació
 
-1. **Clone the repo:**
+1. **Clona el repositori:**
 ```bash
-git clone https://github.com/your-org/circuit-copilot.git
+git clone https://github.com/la-teva-org/circuit-copilot.git
 cd circuit-copilot
-
 ```
 
-2. **Install dependencies (Root):**
-This installs dependencies for the backend, frontend, and shared packages simultaneously.
+2. **Instal·la les dependències (Arrel):**
+Això instal·la les dependències per al backend, el frontend i els paquets compartits simultàniament.
 ```bash
 npm install
-# OR if using pnpm (recommended)
+# O si utilitzes pnpm (recomanat)
 pnpm install
-
 ```
 
-## Step 2: Environment Variables
+## Pas 2: Variables d'Entorn
 
-You must create `.env` files in the specific application folders. **Do not commit these files.**
+Has de crear fitxers `.env` a les carpetes específiques de l'aplicació. **No enviïs aquests fitxers al repositori.**
 
 ### Backend (`apps/backend/.env`)
 
 ```ini
 PORT=3000
 NODE_ENV=development
-# Docker internal URL (for container-to-container)
+# URL interna de Docker (per a comunicació entre contenidors)
 DATABASE_URL="postgresql://postgres:password@db:5432/circuit_db"
-# Localhost URL (for running migrations from your host machine)
+# URL de Localhost (per executar migracions des de la teva màquina local)
 DIRECT_URL="postgresql://postgres:password@localhost:5432/circuit_db"
 JWT_SECRET="dev-secret-key-123"
-
 ```
 
-### Mobile (`apps/mobile/.env`)
+### Mòbil (`apps/mobile/.env`)
 
-**⚠️ CRITICAL:** Do not use `localhost` for API URLs. Real phones cannot reach your computer's `localhost`. Use your computer's **Local LAN IP** (e.g., `192.168.1.X`).
+**⚠️ CRÍTIC:** No utilitzis `localhost` per a les URL de l'API. Els telèfons reals no poden arribar al `localhost` del teu ordinador. Utilitza la **IP de la teva xarxa local (LAN)** (ex: `192.168.1.X`).
 
 ```ini
-# Get this from Mapbox Dashboard
+# Obté això del tauler de control de Mapbox
 EXPO_PUBLIC_MAPBOX_TOKEN="pk.eyJ1..."
 
-# Your Computer's IP Address (Check using 'ipconfig' or 'ifconfig')
+# L'adreça IP del teu ordinador (comprova-la amb 'ipconfig' o 'ifconfig')
 EXPO_PUBLIC_API_URL="http://192.168.1.55:3000/v1"
 EXPO_PUBLIC_SOCKET_URL="http://192.168.1.55:3000"
-
 ```
 
-## Step 3: Database & Infrastructure
+## Pas 3: Base de dades i Infraestructura
 
-We use Docker Compose to run PostgreSQL (with PostGIS extension) and Redis.
+Utilitzem Docker Compose per executar PostgreSQL (amb l'extensió PostGIS) i Redis.
 
-1. **Start the infrastructure:**
+1. **Inicia la infraestructura:**
 ```bash
 docker-compose up -d
-
 ```
 
-*This spins up the database on port `5432`.*
-2. **Run Migrations:**
-Initialize the database schema.
+*Això aixeca la base de dades al port `5432`.*
+2. **Executa les migracions:**
+Inicialitza l'esquema de la base de dades.
 ```bash
-# Run from root or apps/backend depending on script setup
+# Executa des de l'arrel o apps/backend segons la configuració de l'script
 npm run db:migrate
-npm run db:seed  # (Optional) Loads fake tickets/POIs
-
+npm run db:seed  # (Opcional) Carrega entrades/PDI falsos
 ```
 
-## Step 4: Running the Mobile App
+## Pas 4: Executar l'Aplicació Mòbil
 
-Because we use Native Modules (**Mapbox SDK** & **ViroReact AR**), you cannot use the standard "Expo Go" app from the App Store. You must build a **Development Client**.
+Com que utilitzem mòduls natius (**Mapbox SDK** i **ViroReact AR**), no pots utilitzar l'aplicació estàndard "Expo Go" de l'App Store. Has de construir un **Client de Desenvolupament**.
 
-### A. Prebuild (First time only)
+### A. Prebuild (Només la primera vegada)
 
-Generates the native Android/iOS folders with the required config.
+Genera les carpetes natives d'Android/iOS amb la configuració necessària.
 
 ```bash
 cd apps/mobile
 npx expo prebuild
-
 ```
 
-### B. Run on Emulator/Device
+### B. Executar en Emulador/Dispositiu
 
 * **Android:** `npx expo run:android`
-* **iOS:** `npx expo run:ios` (Requires Mac)
+* **iOS:** `npx expo run:ios` (Requereix Mac)
 
-> **Note:** This command will install the "Development Build" app on your device. Once installed, you can just run `npx expo start` in the future to start the Metro Bundler.
+> **Nota:** Aquesta ordre instal·larà l'aplicació "Development Build" al teu dispositiu. Un cop instal·lada, només caldrà que executis `npx expo start` en el futur per iniciar el Metro Bundler.
 
-## Step 5: Running the Backend
+## Pas 5: Executar el Backend
 
-Open a new terminal.
+Obre un nou terminal.
 
 ```bash
 cd apps/backend
 npm run dev
-
 ```
 
-*You should see: `Server running on port 3000 | Connected to PostGIS*`
+*Hauries de veure: `Server running on port 3000 | Connected to PostGIS`*
 
-## Testing AR (Physical Device Guide)
+## Provar l'AR (Guia per a dispositius físics)
 
-**Augmented Reality (AR) does not work on Simulators.**
+**La Realitat Augmentada (AR) no funciona en simuladors.**
 
-1. Connect your physical Android/iOS device via USB.
-2. Ensure your phone and computer are on the **SAME WiFi network**.
-3. Verify that `EXPO_PUBLIC_API_URL` in your `.env` points to your computer's IP, not `localhost`.
-4. Shake the device to open the Developer Menu and ensure "Fast Refresh" is enabled.
+1. Connecta el teu dispositiu físic Android/iOS via USB.
+2. Assegura't que el teu telèfon i el teu ordinador estiguin a la **MATEIXA xarxa WiFi**.
+3. Verifica que `EXPO_PUBLIC_API_URL` al teu `.env` apunti a la IP del teu ordinador, no a `localhost`.
+4. Sacseja el dispositiu per obrir el menú de desenvolupador i assegura't que el "Fast Refresh" estigui activat.
 
-## Troubleshooting
+## Resolució de Problemes
 
-### "Network Request Failed" on Mobile
+### "Network Request Failed" al mòbil
 
-* **Cause:** The phone is trying to reach `localhost` or the firewall is blocking the connection.
-* **Fix:**
-1. Check your computer's IP (`ipconfig` / `ifconfig`).
-2. Update `.env` in `apps/mobile`.
-3. Restart Expo: `npx expo start -c` (Clear cache).
-4. **Windows Users:** Allow Node.js through Windows Firewall.
+* **Causa:** El telèfon està intentant arribar al `localhost` o el tallafoc està bloquejant la connexió.
+* **Solució:**
+1. Comprova la IP del teu ordinador (`ipconfig` / `ifconfig`).
+2. Actualitza el `.env` a `apps/mobile`.
+3. Reinicia Expo: `npx expo start -c` (Neteja la memòria cau).
+4. **Usuaris de Windows:** Permet Node.js a través del Tallafoc de Windows.
 
+### El mapa de Mapbox està en blanc
 
+* **Causa:** Token invàlid o error de correspondència de l'ID del paquet (Bundle ID).
+* **Solució:** Assegura't que el teu Token de Mapbox tingui l'àmbit `Downloads:Read` i que el teu `bundleIdentifier` a `app.json` coincideixi amb el que has registrat a Mapbox.
 
-### Mapbox Map is Blank
+### Error de PostGIS: "function st_dwithin does not exist"
 
-* **Cause:** Invalid Token or Bundle ID mismatch.
-* **Fix:** Ensure your Mapbox Token has the `Downloads:Read` scope and that your `bundleIdentifier` in `app.json` matches what you registered in Mapbox.
+* **Causa:** L'extensió PostGIS no s'ha activat.
+* **Solució:** Connecta't a la base de dades i executa: `CREATE EXTENSION IF NOT EXISTS postgis;` (O comprova si les migracions s'han executat correctament).
 
-### PostGIS Error: "function st_dwithin does not exist"
+### Diagrama de Topologia de Xarxa
 
-* **Cause:** The PostGIS extension wasn't enabled.
-* **Fix:** Connect to the DB and run: `CREATE EXTENSION IF NOT EXISTS postgis;` (Or check if migrations ran correctly).
-### Network Topology Diagram
-
-Since connecting a physical mobile device to a local Docker backend is the most common point of failure, visualizing the network flow is helpful:
+Com que connectar un dispositiu mòbil físic a un backend local de Docker és el punt de fallada més comú, visulitzar el flux de xarxa és d'ajuda:
+```mermaid
+graph TD
+    A[Dispositiu Mòbil Físic] -- "WiFi (192.168.1.x)" --> B[Router WiFi]
+    B -- "Xarxa Local" --> C[El teu Ordinador]
+    C -- "Port 3000" --> D[Contenidor API]
+    D -- "Xarxa Docker" --> E[Contenidor PostGIS]
+```
