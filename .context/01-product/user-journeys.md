@@ -1,20 +1,20 @@
-# User Journeys
+# Recorreguts d'Usuari (User Journeys)
 
-## Journey: The Efficient Exit (Traffic Management)
+## Recorregut: La Sortida Eficient (Gestió del Trànsit)
 
-- **Context:** The race has just finished. 100,000 people are leaving.
-- **Action:** User opens app to find their car (saved in US34).
-- **System:**
-    1. Checks user's saved parking coordinates.
-    2. Checks server for "Gate Congestion Levels".
-    3. Directs user to a secondary exit gate that is 5 minutes longer to walk but has 20 minutes less queue.
-    4. Uses AR arrows to guide them through the crowd.
+- **Context:** La cursa acaba de finalitzar. 100.000 persones estan sortint.
+- **Acció:** L'usuari obre l'app per trobar el seu cotxe (guardat a l'US34).
+- **Sistema:**
+    1. Comprova les coordenades d'aparcament guardades de l'usuari.
+    2. Consulta al servidor els "Nivells de Congestió de les Portes".
+    3. Dirigeix l'usuari a una porta de sortida secundària que triga 5 minuts més a peu però té 20 minuts menys de cua.
+    4. Utilitza fletxes d'AR per guiar-los a través de la multitud.
 
-## Journey: The Group Reunion
+## Recorregut: El retrobament del Grup
 
-- **Context:** User A is at Tribuna G, User B is at Food Truck Zone.
-- **Action:** User A taps "Find B".
-- **System:**
-    1. Server pushes User B's last throttled location (via Socket.io).
-    2. App draws a dynamic line on the map.
-    3. As they get closer (<50m), App suggests: "Switch to AR to spot your friend in the crowd."
+- **Context:** L'Usuari A està a la Tribuna G, l'Usuari B està a la Zona de Food Trucks.
+- **Acció:** L'Usuari A prem "Troba el B".
+- **Sistema:**
+    1. El servidor envia l'última ubicació limitada de l'Usuari B (via Socket.io).
+    2. L'app dibuixa una línia dinàmica al mapa.
+    3. A mesura que s'apropen (<50m), l'App suggereix: "Passa a l'AR per localitzar el teu amic entre la multitud."

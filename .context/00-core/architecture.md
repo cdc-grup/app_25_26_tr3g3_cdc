@@ -1,24 +1,24 @@
-# Architecture: Circuit Copilot
+# Arquitectura: Circuit Copilot
 
-## Tech Stack Definition
+## Definició de l'Estructura Tecnològica
 
-- **Mobile Framework:** Expo (React Native).
-- **Maps Engine:** **Mapbox SDK** (`@rnmapbox/maps`).
-  - *Reason:* Required for custom vector tiles of the circuit and offline routing graph.
-- **AR Engine:** **ViroCommunity (ViroReact)**.
-  - *Reason:* Native support for Geo-anchored 3D objects (Location-based AR).
+- **Framework Mòbil:** Expo (React Native).
+- **Motor de Mapes:** **Mapbox SDK** (`@rnmapbox/maps`).
+  - *Motiu:* Necessari per a tesel·les vectorials personalitzades del circuit i graf d'encaminament fora de línia.
+- **Motor d'AR:** **ViroCommunity (ViroReact)**.
+  - *Motiu:* Suport natiu per a objectes 3D geo-ancorats (AR basada en la ubicació).
 - **Backend:** Node.js (Express).
-- **Database:** PostgreSQL with **PostGIS** extension enabled.
-- **Real-time:** Socket.io with **MessagePack** parser (for binary compression).
+- **Base de Dades:** PostgreSQL amb l'extensió **PostGIS** activada.
+- **Temps Real:** Socket.io amb analitzador **MessagePack** (per a compressió binària).
 
-## Data Efficiency Strategy (High Density Environment)
+## Estratègia d'Eficiència de Dades (Entorn d'Alta Densitat)
 
-1. **Telemetry Throttling:**
-   - Client sends GPS updates ONLY if: `delta_distance > 15m` OR `delta_time > 45s`.
-   - Prevents network saturation during race events.
-2. **Offline First:**
-   - Map styles and static POIs (toilets, gates) are downloaded during Onboarding.
-   - Runtime data usage is limited to: Friend positions and Congestion updates.
-3. **Local Pathfinding:**
-   - Route calculation happens on the device using the downloaded navigation graph.
-   - Server only pushes "Blocked Edges" (congested paths) to update the local graph weights.
+1. **Limitació de Telemetria:**
+   - El client envia actualitzacions GPS NOMÉS si: `delta_distance > 15m` O `delta_time > 45s`.
+   - Evita la saturació de la xarxa durant esdeveniments de curses.
+2. **Primer el mode fora de línia (Offline First):**
+   - Els estils de mapa i els PDI estàtics (lavabos, portes) es descarreguen durant l'Onboarding.
+   - L'ús de dades en temps d'execució es limita a: Posicions d'amics i actualitzacions de congestió.
+3. **Càlcul de Rutes Local:**
+   - El càlcul de la ruta es realitza al dispositiu utilitzant el graf de navegació descarregat.
+   - El servidor només envia "Arrestes Bloquejades" (camins congestionats) per actualitzar els pesos del graf local.
