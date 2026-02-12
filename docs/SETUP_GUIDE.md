@@ -25,7 +25,7 @@ Utilitzem **Turborepo** / Workspaces. No cal fer `npm install` a cada carpeta.
 │   ├── mobile/         # Aplicació Expo (React Native)
 │   └── server/        # API Node.js + Express
 ├── packages/
-│   ├── shared/         # Tipus TypeScript compartits (contracte Frontend <-> Backend)
+│   ├── shared/         # Tipus TypeScript compartits (@app/shared)
 │   └── database/       # Esquema de Prisma/Sequelize i Migracions
 └── docker-compose.yml  # Orquestra la base de dades i Redis
 ```

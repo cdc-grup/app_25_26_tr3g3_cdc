@@ -1,17 +1,29 @@
 {
-  "name": "server",
+  "name": "@app/server",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Circuit Copilot Backend API",
+  "main": "index.ts",
   "type": "module",
   "scripts": {
+    "dev": "tsx watch index.ts",
+    "build": "tsc",
+    "lint": "eslint \"**/*.ts\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2",
+    "cors": "^2.8.5"
+  },
   "devDependencies": {
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3",
+    "@app/shared": "*",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6"
-  }
+  },
+  "keywords": [],
+
+  "author": "",
+  "license": "ISC"
 }
+
