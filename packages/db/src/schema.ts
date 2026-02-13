@@ -1,0 +1,125 @@
+import { pgTable, serial, text, varchar, boolean, timestamp, integer, pgEnum, doublePrecision, primaryKey } from 'drizzle-orm/pg-core';
+import { geometry } from './custom-types';
+
+// ---------------------------------------------------------
+// ENUMS
+// ---------------------------------------------------------
+
+export const mobilityProfileEnum = pgEnum('mobility_profile', [
+  'standard',
+  'wheelchair',
+  'reduced_mobility',
+  'visual_impairment',
+  'family_stroller',
+]);
+
+export const poiTypeEnum = pgEnum('poi_type', [
+  'restaurant',
+  'wc',
+  'grandstand',
+  'gate',
+  'medical',
+  'shop',
+  'parking',
+  'meetup_point',
+]);
+
+export const crowdLevelEnum = pgEnum('crowd_level', [
+  'low',
+  'moderate',
+  'high',
+  'blocked',
+]);
+
+export const surfaceTypeEnum = pgEnum('surface_type', [
+  'asphalt',
+  'grass',
+  'gravel',
+  'stairs',
+  'ramp',
+]);
+
+// ---------------------------------------------------------
+// TABLES
+// ---------------------------------------------------------
+
+export const users = pgTable('users', {
+  id: serial('id').primaryKey(),
+  email: varchar('email').unique().notNull(),
+  passwordHash: varchar('password_hash').notNull(),
+  fullName: varchar('full_name'),
+  mobilityMode: mobilityProfileEnum('mobility_mode').default('standard'),
+  avoidStairs: boolean('avoid_stairs').default(false),
+  avoidCrowds: boolean('avoid_crowds').default(false),
+  avoidSlopes: boolean('avoid_slopes').default(false),
+  createdAt: timestamp('created_at').defaultNow(),
+});
+
+export const tickets = pgTable('tickets', {
+  id: serial('id').primaryKey(),
+  userId: integer('user_id').references(() => users.id).notNull(),
+  code: varchar('code').unique(),
+  gate: varchar('gate'),
+  zoneName: varchar('zone_name'),
+  seatRow: varchar('seat_row'),
+  seatNumber: varchar('seat_number'),
+  seatLocation: geometry('seat_location'), // Using point geometry
+  isActive: boolean('is_active').default(true),
+  createdAt: timestamp('created_at'),
+});
+
+export const pointsOfInterest = pgTable('points_of_interest', {
+  id: serial('id').primaryKey(),
+  name: varchar('name').notNull(),
+  description: text('description'),
+  type: poiTypeEnum('type').notNull(),
+  location: geometry('location').notNull(),
+  currentCrowdLevel: crowdLevelEnum('current_crowd_level').default('low'),
+  isWheelchairAccessible: boolean('is_wheelchair_accessible').default(true),
+  hasPriorityLane: boolean('has_priority_lane'),
+});
+
+export const pathSegments = pgTable('path_segments', {
+  id: integer('id').primaryKey(), // ID is explicitly integer in DBML, not serial/increment
+  startNode: geometry('start_node'),
+  endNode: geometry('end_node'),
+  surface: surfaceTypeEnum('surface'),
+  slopePercentage: doublePrecision('slope_percentage'),
+  hasStairs: boolean('has_stairs'),
+  currentCrowdLevel: crowdLevelEnum('current_crowd_level').default('low'),
+});
+
+export const groups = pgTable('groups', {
+  id: serial('id').primaryKey(),
+  name: varchar('name'),
+  inviteCode: varchar('invite_code').unique(),
+  createdBy: integer('created_by').references(() => users.id),
+  meetingPoint: geometry('meeting_point'),
+  createdAt: timestamp('created_at'),
+});
+
+export const groupMembers = pgTable('group_members', {
+  userId: integer('user_id').references(() => users.id),
+  groupId: integer('group_id').references(() => groups.id),
+  joinedAt: timestamp('joined_at'),
+  lastLocation: geometry('last_location'),
+  lastUpdated: timestamp('last_updated'),
+}, (t) => ({
+  pk: primaryKey({ columns: [t.userId, t.groupId] }),
+}));
+
+export const savedLocations = pgTable('saved_locations', {
+  id: serial('id').primaryKey(),
+  userId: integer('user_id').references(() => users.id),
+  label: varchar('label'),
+  location: geometry('location'),
+  createdAt: timestamp('created_at'),
+});
+
+export const offlinePackages = pgTable('offline_packages', {
+  id: integer('id').primaryKey(), // Explicit integer in DBML
+  regionName: varchar('region_name'),
+  fileUrl: varchar('file_url'),
+  version: varchar('version'),
+  sizeMb: doublePrecision('size_mb'),
+});

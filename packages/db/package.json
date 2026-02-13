@@ -1,0 +1,26 @@
+{
+  "name": "@app/db",
+  "version": "1.0.0",
+  "description": "Shared database schema and connection logic",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": {
+    "build": "tsc",
+    "generate": "drizzle-kit generate:pg",
+    "migrate": "tsx src/migrate.ts",
+    "studio": "drizzle-kit studio",
+    "lint": "eslint \"**/*.ts\""
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.30.9",
+    "pg": "^8.11.5",
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.20.17",
+    "@types/pg": "^8.11.5",
+    "tsx": "^4.7.1",
+    "typescript": "^5.3.3",
+    "@types/node": "^20.11.24"
+  }
+}

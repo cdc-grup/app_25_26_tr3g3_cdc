@@ -1,0 +1,13 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1770970839227,
+      "tag": "0000_sturdy_proemial_gods",
+      "breakpoints": true
+    }
+  ]
+}
