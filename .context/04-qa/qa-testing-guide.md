@@ -9,7 +9,31 @@ Aquesta aplicació no es pot validar només amb simuladors. El Circuit de Barcel
 3. **Ombra GPS (Multicamí):** Les estructures altes fan rebotar el senyal GPS.
 4. **Saturació de la Xarxa:** 100.000 persones competint per l'amplada de banda 4G/5G.
 
-## 2. Fase 1: Simulacions de Laboratori (Oficina)
+## 2. Piràmide de Proves: Estratègia Automàtitzada
+
+_Abans de sortir de l'oficina, el codi ha de passar aquests filtres:_
+
+### A. Proves Unitàries i de Lògica (Shared & API)
+
+- **Framework:** [Vitest](https://vitest.dev/).
+- **Objectiu:** Validar algorismes crítics sense dependències externes.
+- **Exemples:**
+  - Càlcul de distàncies entre coordenades (lògica de proximitat a PDI).
+  - Validació de formats de telemetria GPS.
+  - Transformació de dades per al Socket.io (MessagePack).
+
+### B. Proves d'Endpoint (API Integration)
+
+- **Framework:** Vitest + [Supertest](https://github.com/ladjs/supertest).
+- **Objectiu:** Assegurar que les rutes de l'API responen correctament amb els codis HTTP i esquemes de dades esperats.
+
+### C. Proves de Components (Mobile)
+
+- **Framework:** [Jest](https://jestjs.io/) + [React Native Testing Library](https://testing-library.com/docs/react-native-testing-library/intro/).
+- **Objectiu:** Comprovar que les pantalles i components de la UI reaccionen correctamente a diferents estats (sense necessitat d'un dispositiu real).
+- **Exemple:** Verificar que el botó d'AR es desactiva si el `compass_accuracy` és nul.
+
+## 3. Fase 1: Simulacions de Laboratori (Oficina)
 
 _Abans d'anar al circuit, comprova això:_
 

@@ -22,8 +22,8 @@ Per garantir un procés de desenvolupament fluid i una integració perfecta amb 
 
 1.  **Requisits**: Docker Desktop i Node.js instal·lats.
 2.  **Instal·lar**: `npm install` a l'arrel.
-3.  **Executar**: `docker-compose up` per aixecar l'API i la base de dades.
-4.  **Desenvolupar**: `npm run dev` per iniciar el mode de desenvolupament amb Turbo.
+3.  **Backend (DB + API)**: `docker compose up --build` per iniciar la base de dades i l'API.
+4.  **Frontend (App)**: `npm run start --workspace=mobile` en una nova terminal per iniciar Expo.
 
 ## 🛠️ Estructura Tecnològica
 

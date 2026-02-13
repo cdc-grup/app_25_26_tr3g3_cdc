@@ -62,15 +62,19 @@ Utilitzem Docker Compose per executar PostgreSQL (amb l'extensió PostGIS).
 docker compose up --build
 ```
 
-## Pas 4: Desenvolupament amb Turbo
+Per al desenvolupament actiu, el flux de treball més eficient és separar el backend del frontend:
 
-Per al desenvolupament actiu, utilitzem **Turbo** per orquestrar totes les aplicacions simultàniament:
+1. **Backend (Infraestructura)**:
+   ```bash
+   docker compose up --build
+   ```
+   Això aixeca la base de dades i l'API en segon pla (Docker).
 
-```bash
-npm run dev
-```
-
-Això carregarà tant l'`api` com la part `mobile` en una sola sessió de terminal.
+2. **Frontend (Mobile)**:
+   ```bash
+   npm run start --workspace=mobile
+   ```
+   Això inicia l'entorn de Metro per a l'app en la teva terminal local.
 
 ### Comandos de Turbo
 
