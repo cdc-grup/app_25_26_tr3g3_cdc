@@ -1,4 +1,4 @@
-/apps/server/node_modules
-/apps/server/package-lock.json
+/apps/api/node_modules
+/apps/api/package-lock.json
 /node_modules
 /package-lock.json

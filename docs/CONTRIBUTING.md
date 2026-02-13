@@ -67,7 +67,7 @@ Abans de cada commit, s'executa un hook de pre-commit per assegurar que el teu c
 Quan modifiquis `packages/shared`:
 
 1. Executa `npm run build` a la carpeta shared per assegurar-te que els fitxers de declaració de TypeScript s'actualitzen.
-2. Reinicia el Metro Bundler (Mòbil) i el Servidor Node (Backend) per recollir els canvis.
+2. Reinicia el Metro Bundler (Mòbil) i el Servidor API (Backend) per recollir els canvis.
 
 ## Resolució de Problemes per a Col·laboradors
 

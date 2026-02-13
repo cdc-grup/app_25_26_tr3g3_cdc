@@ -1,28 +1,31 @@
-# 📱 
+# 📱 Circuit Copilot
 
-Welcome to the official repository. This application is a full-stack solution built with **Express**, **Expo**, and **PostgreSQL**.
+Benvingut al repositori oficial. Aquesta aplicació és una solució full-stack construïda amb **Express**, **Expo** i **PostgreSQL**, organitzada en un **monorepo** amb **Turborepo** i **Docker**.
 
-## 🗺️ Documentation Map
+## 🗺️ Mapa de Documentació
 
-To ensure a smooth development process and seamless integration with AI agents, we maintain a "Source of Truth" in the following directories:
+Per garantir un procés de desenvolupament fluid i una integració perfecta amb agents d'IA, mantenim una "Font de la Veritat" en els següents directoris:
 
-### 🧠 Project Context (AI-Ready)
-* **[System Prompt](.context/system-prompt.md)**: Guidelines for code style, language (Catalan/English mix), and agent behavior.
-* **[Architecture](.context/architecture.md)**: Detailed technical stack and data flow (Express + Expo + Postgres).
-* **[User Journeys](.context/user-journeys.md)**: Business logic and core user flows.
+### 🧠 Context del Projecte (Llest per a IA)
+* **[System Prompt](.context/00-core/system-prompt.md)**: Pautes d'estil de codi, idioma i comportament de l'agent.
+* **[Arquitectura](.context/00-core/architecture.md)**: Detalls de l'estructura tècnica i flux de dades.
+* **[User Journeys](.context/01-product/user-journeys.md)**: Lògica de negoci i fluxos principals d'usuari.
 
-### 🛠️ Technical Specifications
-* **[Database Schema](docs/database-schema.md)**: ER Diagrams and table definitions.
-* **[API Reference](docs/api-spec.yaml)**: OpenAPI/Swagger definitions for all endpoints.
-* **[Contributing Guide](CONTRIBUTING.md)**: Rules for branching, commits, and Pull Requests.
+### 🛠️ Especificacions i Guies
+* **[Guia de Configuració](docs/SETUP_GUIDE.md)**: Com configurar l'entorn local amb Docker.
+* **[Guia de Desplegament](docs/DEPLOYMENT.md)**: Com portar l'aplicació a producció.
+* **[Guia del Col·laborador](docs/CONTRIBUTING.md)**: Regles per a branques, commits i Pull Requests.
 
-## ⚡ Quick Start
+## ⚡ Inici Ràpid
 
-in progress
+1.  **Requisits**: Docker Desktop i Node.js instal·lats.
+2.  **Instal·lar**: `npm install` a l'arrel.
+3.  **Executar**: `docker-compose up` per aixecar l'API i la base de dades.
+4.  **Desenvolupar**: `npm run dev` per iniciar el mode de desenvolupament amb Turbo.
 
-## 🛠️ Tech Stack
+## 🛠️ Estructura Tecnològica
 
-* **Frontend:** React Native via Expo (TypeScript).
-* **Backend:** Node.js with Express (TypeScript).
-* **Database:** PostgreSQL.
-* **Communication:** REST API / JSON.
+* **Frontend:** React Native via Expo (@app/mobile).
+* **Backend:** Node.js amb Express (@app/api).
+* **Compartit:** Tipus i lògica comuna (@app/shared).
+* **Infraestructura:** Postgres + PostGIS via Docker.

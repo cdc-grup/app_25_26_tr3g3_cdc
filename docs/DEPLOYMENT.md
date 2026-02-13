@@ -1,8 +1,8 @@
 # Guia de Desplegament: Circuit Copilot
 
-Aquest document descriu el procés de desplegament a producció tant per a l'API del Backend com per a l'aplicació mòbil.
+Aquest document descriu el procés de desplegament a producció tant per a l'API com per a l'aplicació mòbil.
 
-## 1. Desplegament del Backend (Node.js + PostGIS)
+## 1. Desplegament de l'API (Node.js + PostGIS)
 
 El backend s'ha de desplegar en un proveïdor que admeti **Contenidors Docker** i **Volums Persistents** per a PostgreSQL.
 
