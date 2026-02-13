@@ -79,12 +79,13 @@ EXPO_PUBLIC_SOCKET_URL="http://192.168.1.55:3000"
 
 Utilitzem Docker Compose per executar PostgreSQL (amb l'extensió PostGIS) i Redis.
 
-1. **Inicia la infraestructura:**
+1. **Inicia l'entorn amb Docker:**
+Aquesta ordre aixecarà la base de dades (PostgreSQL + PostGIS) i també el servidor de l'API en mode desenvolupament.
 ```bash
-docker-compose up -d
+docker-compose up --build
 ```
 
-*Això aixeca la base de dades al port `5432`.*
+*Això aixeca la base de dades al port `5432` i l'API al port `3000`.*
 2. **Executa les migracions:**
 Inicialitza l'esquema de la base de dades.
 ```bash
@@ -113,16 +114,18 @@ npx expo prebuild
 
 > **Nota:** Aquesta ordre instal·larà l'aplicació "Development Build" al teu dispositiu. Un cop instal·lada, només caldrà que executis `npx expo start` en el futur per iniciar el Metro Bundler.
 
-## Pas 5: Executar l'API
+## Pas 5: Comprovar l'estat dels serveis
 
-Obre un nou terminal.
+Si has fet `docker-compose up`, l'API ja hauria d'estar funcionant. Pots veure els logs amb:
 
 ```bash
-cd apps/api
-npm run dev
+docker-compose logs -f api
 ```
 
 *Hauries de veure: `Server running on port 3000 | Connected to PostGIS`*
+
+### Per què no fem servir Docker per al mòbil?
+Tot i que el backend va dins de Docker per assegurar que la base de dades i l'API funcionin igual a tot arreu, l'aplicació mòbil s'executa **nativament** al teu ordinador per facilitar la connexió amb el Metro Bundler, emuladors i dispositius físics.
 
 ## Provar l'AR (Guia per a dispositius físics)
 

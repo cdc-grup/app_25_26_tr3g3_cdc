@@ -22,3 +22,10 @@
 3. **Càlcul de Rutes Local:**
    - El càlcul de la ruta es realitza al dispositiu utilitzant el graf de navegació descarregat.
    - El servidor només envia "Arrestes Bloquejades" (camins congestionats) per actualitzar els pesos del graf local.
+
+## Estratègia de Contenidors i Entorn
+
+- **Backend (API) & Database:** Dockeritzats mitjançant **Docker Compose**.
+  - *PostgreSQL/PostGIS:* Imatge oficial.
+  - *API:* Dockerfile multi-etapa (dev/prod).
+- **Frontend (Mòbil):** Execució nativa (fora de Docker) per optimitzar la connexió amb el Metro Bundler i dispositius físics.
