@@ -1,28 +1,24 @@
 # --- Base Stage ---
 FROM node:20-slim AS base
-ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable
 WORKDIR /app
-COPY package.json pnpm-lock.yaml* ./
+COPY package.json package-lock.json* ./
 COPY packages/shared ./packages/shared
 COPY apps/api/package.json ./apps/api/
 
 # --- Builder Stage ---
 FROM base AS builder
 COPY . .
-RUN pnpm install
-RUN pnpm --filter @app/shared build || true
-# Note: Building @app/api if needed, but for now we follow Sprint 0 basics.
+RUN npm install
+RUN npm run build --workspace=@app/shared || true
 
 # --- Development Stage ---
 FROM builder AS development
 ENV NODE_ENV=development
-CMD ["pnpm", "--filter", "@app/api", "dev"]
+CMD ["npm", "run", "dev", "--workspace=@app/api"]
 
 # --- Production Builder Stage ---
 FROM builder AS prod-builder
-RUN pnpm --filter @app/api build
+RUN npm run build --workspace=@app/api
 
 # --- Production Stage ---
 FROM node:20-slim AS production

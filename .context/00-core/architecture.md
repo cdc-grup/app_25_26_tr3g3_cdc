@@ -4,9 +4,9 @@
 
 - **Framework Mòbil:** Expo (React Native).
 - **Motor de Mapes:** **Mapbox SDK** (`@rnmapbox/maps`).
-  - *Motiu:* Necessari per a tesel·les vectorials personalitzades del circuit i graf d'encaminament fora de línia.
+  - _Motiu:_ Necessari per a tesel·les vectorials personalitzades del circuit i graf d'encaminament fora de línia.
 - **Motor d'AR:** **ViroCommunity (ViroReact)**.
-  - *Motiu:* Suport natiu per a objectes 3D geo-ancorats (AR basada en la ubicació).
+  - _Motiu:_ Suport natiu per a objectes 3D geo-ancorats (AR basada en la ubicació).
 - **Backend:** Node.js (Express).
 - **Base de Dades:** PostgreSQL amb l'extensió **PostGIS** activada.
 - **Temps Real:** Socket.io amb analitzador **MessagePack** (per a compressió binària).
@@ -26,6 +26,6 @@
 ## Estratègia de Contenidors i Entorn
 
 - **Backend (API) & Database:** Dockeritzats mitjançant **Docker Compose**.
-  - *PostgreSQL/PostGIS:* Imatge oficial.
-  - *API:* Dockerfile multi-etapa (dev/prod).
+  - _PostgreSQL/PostGIS:_ Imatge oficial.
+  - _API:_ Dockerfile multi-etapa (dev/prod).
 - **Frontend (Mòbil):** Execució nativa (fora de Docker) per optimitzar la connexió amb el Metro Bundler i dispositius físics.

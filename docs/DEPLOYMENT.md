@@ -10,8 +10,8 @@ El backend s'ha de desplegar en un proveïdor que admeti **Contenidors Docker** 
 
 Utilitzem el Dockerfile situat a `apps/backend/Dockerfile`.
 
-* **Port:** 3000 (Express i WebSockets).
-* **Entorn:** Assegura't que el proveïdor admeti sessions fixes o WebSockets (configuració de balancejador de càrrega).
+- **Port:** 3000 (Express i WebSockets).
+- **Entorn:** Assegura't que el proveïdor admeti sessions fixes o WebSockets (configuració de balancejador de càrrega).
 
 ### Requisits d'Infraestructura de Producció
 
@@ -21,12 +21,12 @@ Utilitzem el Dockerfile situat a `apps/backend/Dockerfile`.
 
 ### Variables d'Entorn (Producció)
 
-| Variable | Descripció |
-| --- | --- |
+| Variable       | Descripció                                                   |
+| -------------- | ------------------------------------------------------------ |
 | `DATABASE_URL` | Cadena de connexió (ex: `postgres://user:pass@host:5432/db`) |
-| `JWT_SECRET` | Una cadena llarga i aleatòria per signar tokens. |
-| `CORS_ORIGIN` | Estableix el teu domini o `*` (es recomana restringit). |
-| `NODE_ENV` | `production` |
+| `JWT_SECRET`   | Una cadena llarga i aleatòria per signar tokens.             |
+| `CORS_ORIGIN`  | Estableix el teu domini o `*` (es recomana restringit).      |
+| `NODE_ENV`     | `production`                                                 |
 
 ### Flux de Desplegament (Exemple: Railway / DigitalOcean App Platform)
 
@@ -94,7 +94,8 @@ Després del desplegament, realitza les comprovacions següents:
 
 1. **Connectivitat:** Obre la URL de producció en un navegador o Postman. Ha de retornar un `200 OK` o una prova d'estat (health check) en JSON.
 2. **Aperitiu de mans (Handshake) de WebSocket:** Verifica que l'aplicació mòbil pugui establir una connexió `wss://`.
-* *Problema comú:* Els balancejadors de càrrega com Nginx sovint necessiten una configuració explícita per permetre les capçaleres `Upgrade` per als WebSockets.
+
+- _Problema comú:_ Els balancejadors de càrrega com Nginx sovint necessiten una configuració explícita per permetre les capçaleres `Upgrade` per als WebSockets.
 
 3. **Comprovació de PostGIS:** Executa una consulta de mostra de "POI més proper" a través de l'API per assegurar-te que l'extensió de la base de dades està activa.
 4. **Recursos de Mapbox:** Assegura't que el mapa es carrega a la versió de producció (comprova que el Token de Producció/ID del Paquet sigui vàlid).
