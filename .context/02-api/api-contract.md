@@ -2,10 +2,10 @@
 
 ## 1. Estàndards Generals
 
-* **URL Base:** `https://api.circuit-copilot.com/v1`
-* **Autenticació:** Token de portador (Bearer Token - JWT) a les capçaleres. `Authorization: Bearer <token>`
-* **Format de Dades:** JSON per a REST, MessagePack (binari) per a WebSockets (actualitzacions d'ubicació).
-* **Format Geo:** Totes les coordenades han de seguir l'estàndard **GeoJSON**: `[longitud, latitud]`.
+- **URL Base:** `https://api.circuit-copilot.com/v1`
+- **Autenticació:** Token de portador (Bearer Token - JWT) a les capçaleres. `Authorization: Bearer <token>`
+- **Format de Dades:** JSON per a REST, MessagePack (binari) per a WebSockets (actualitzacions d'ubicació).
+- **Format Geo:** Totes les coordenades han de seguir l'estàndard **GeoJSON**: `[longitud, latitud]`.
 
 ## 2. Punts finals REST (HTTP)
 
@@ -15,7 +15,7 @@
 
 Enllaça una entrada física/digital amb l'usuari i n'extreu les metadades d'accés.
 
-* **Cos (Body):**
+- **Cos (Body):**
 
 ```json
 {
@@ -24,7 +24,7 @@ Enllaça una entrada física/digital amb l'usuari i n'extreu les metadades d'acc
 }
 ```
 
-* **Resposta (200 OK):**
+- **Resposta (200 OK):**
 
 ```json
 {
@@ -43,11 +43,11 @@ Enllaça una entrada física/digital amb l'usuari i n'extreu les metadades d'acc
 
 Guarda la ubicació del cotxe per a la sortida.
 
-* **Cos (Body):**
+- **Cos (Body):**
 
 ```json
 {
-  "location": [2.2610, 41.5690],
+  "location": [2.261, 41.569],
   "notes": "Pàrquing B, Fila 4"
 }
 ```
@@ -58,8 +58,8 @@ Guarda la ubicació del cotxe per a la sortida.
 
 Obté els Punts d'Interès (POI) estàtics. Es poden emmagatzemar a la memòria cau del dispositiu (SQLite local).
 
-* **Paràmetres de consulta (Query Params):** `?category=toilet,food&changed_since=2023-10-01`
-* **Resposta (200 OK):**
+- **Paràmetres de consulta (Query Params):** `?category=toilet,food&changed_since=2023-10-01`
+- **Resposta (200 OK):**
 
 ```json
 {
@@ -85,7 +85,7 @@ Obté els Punts d'Interès (POI) estàtics. Es poden emmagatzemar a la memòria 
 
 Sol·licita una ruta per a vianants tenint en compte la congestió actual.
 
-* **Cos (Body):**
+- **Cos (Body):**
 
 ```json
 {
@@ -95,7 +95,7 @@ Sol·licita una ruta per a vianants tenint en compte la congestió actual.
 }
 ```
 
-* **Resposta (200 OK):**
+- **Resposta (200 OK):**
 
 ```json
 {
@@ -103,7 +103,8 @@ Sol·licita una ruta per a vianants tenint en compte la congestió actual.
   "distance_meters": 450,
   "estimated_time_seconds": 380,
   "congestion_level": "alt", // La UI activa el color d'advertència
-  "ar_checkpoints": [ // Nodes on han d'aparèixer fletxes d'AR
+  "ar_checkpoints": [
+    // Nodes on han d'aparèixer fletxes d'AR
     { "coords": [2.262, 41.569], "instruction": "Gira a l'esquerra a l'estand de Red Bull" }
   ]
 }
@@ -120,7 +121,7 @@ Sol·licita una ruta per a vianants tenint en compte la congestió actual.
 
 Enviat com a màxim 1 vegada cada 30 segons o si s'ha mogut >20 m.
 
-* **Càrrega útil (Payload):**
+- **Càrrega útil (Payload):**
 
 ```json
 {
@@ -136,7 +137,7 @@ Enviat com a màxim 1 vegada cada 30 segons o si s'ha mogut >20 m.
 
 Per unir-se a un grup d'amics.
 
-* **Càrrega útil (Payload):** `{ "group_code": "FAST-CARS-24" }`
+- **Càrrega útil (Payload):** `{ "group_code": "FAST-CARS-24" }`
 
 ### 📥 Emissions del Servidor (El que rep el mòbil)
 
@@ -144,7 +145,7 @@ Per unir-se a un grup d'amics.
 
 Posicions dels amics al mapa.
 
-* **Càrrega útil (Payload):**
+- **Càrrega útil (Payload):**
 
 ```json
 [
@@ -157,7 +158,7 @@ Posicions dels amics al mapa.
 
 Dades de la cursa en viu (Baixa Latència).
 
-* **Càrrega útil (Payload):**
+- **Càrrega útil (Payload):**
 
 ```json
 {

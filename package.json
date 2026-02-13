@@ -1,12 +1,13 @@
 {
   "name": "app-project",
   "version": "1.0.0",
+  "packageManager": "npm@10.9.4",
   "private": true,
   "description": "Fullstack project with Express, Expo and PostgreSQL",
   "scripts": {
-    "build": "turbo build",
-    "dev": "turbo dev",
-    "lint": "turbo lint",
+    "build": "turbo build --filter=!//",
+    "dev": "turbo dev --filter=!//",
+    "lint": "turbo lint --filter=!//",
     "format": "prettier --write \"**/*.{ts,tsx,json,md}\""
   },
   "workspaces": [
@@ -14,6 +15,7 @@
     "packages/*"
   ],
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@typescript-eslint/eslint-plugin": "^8.55.0",
     "@typescript-eslint/parser": "^8.55.0",
     "eslint": "^9.39.2",
@@ -24,9 +26,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-native": "^5.0.0",
     "prettier": "^3.8.1",
-    "typescript": "^5.9.3"
-  },
-  "workspaces": [
-    "apps/*"
-  ]
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.55.0"
+  }
 }

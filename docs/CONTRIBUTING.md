@@ -6,10 +6,10 @@ En primer lloc, gràcies per ajudar-nos a construir el millor acompanyant per al
 
 Utilitzem un flux de treball de **Branca de Funcionalitat (Feature Branch)**. Crea sempre la branca a partir de `main` i fusiona-la mitjançant una Pull Request.
 
-* **Funcionalitat:** `feat/feature-name` (ex: `feat/ar-arrows`)
-* **Correcció d'errors (Bug Fix):** `fix/bug-name` (ex: `fix/socket-reconnection`)
-* **Documentació:** `docs/description`
-* **Refactorització:** `refactor/component-name`
+- **Funcionalitat:** `feat/feature-name` (ex: `feat/ar-arrows`)
+- **Correcció d'errors (Bug Fix):** `fix/bug-name` (ex: `fix/socket-reconnection`)
+- **Documentació:** `docs/description`
+- **Refactorització:** `refactor/component-name`
 
 ## Convenció de Missatges de Commit
 
@@ -17,10 +17,10 @@ Seguim els [Commits Convencionals](https://www.conventionalcommits.org/). Això 
 
 **Format:** `<tipus>(àmbit): <descripció>`
 
-* `feat(mobile): add mapbox user tracking`
-* `fix(api): correct postgis query for nearest toilets`
-* `docs(shared): update user ticket interface`
-* `chore(root): update dependencies`
+- `feat(mobile): add mapbox user tracking`
+- `fix(api): correct postgis query for nearest toilets`
+- `docs(shared): update user ticket interface`
+- `chore(root): update dependencies`
 
 ## Flux de Treball al Monorepo (Turborepo)
 
@@ -28,16 +28,17 @@ Com que estem en un monorepo, para atenció a on afegeixes el codi:
 
 1. **Lògica Compartida:** Si un tipus, interfície o utilitat s'utilitza tant a l'App com a l'API, posa-ho a `packages/shared`.
 2. **Scripts:** Utilitza el `package.json` arrel per executar tasques a tot el repositori:
-* `npm run dev`: Inicia totes les aplicacions (Backend + Mòbil) en paral·lel.
-* `npm run build`: Construeix tots els paquets.
-* `npm run lint`: Executa ESLint a totes les aplicacions.
+
+- `npm run dev`: Inicia totes les aplicacions (Backend + Mòbil) en paral·lel.
+- `npm run build`: Construeix tots els paquets.
+- `npm run lint`: Executa ESLint a totes les aplicacions.
 
 ## Estàndards de Programació
 
 ### TypeScript
 
-* **No `any`:** Utilitza el tipat correcte. Si no n'estàs segur, defineix una interfície a `packages/shared`.
-* **Retorns Explícits:** Defineix sempre el tipus de retorn de les teves funcions i punts finals de l'API.
+- **No `any`:** Utilitza el tipat correcte. Si no n'estàs segur, defineix una interfície a `packages/shared`.
+- **Retorns Explícits:** Defineix sempre el tipus de retorn de les teves funcions i punts finals de l'API.
 
 ### Llinting i Format
 
@@ -53,7 +54,7 @@ Abans de cada commit, s'executa un hook de pre-commit per assegurar que el teu c
 
 1. No té errors de linting.
 2. Passa les proves bàsiques.
-**No et saltis aquests hooks.**
+   **No et saltis aquests hooks.**
 
 ## Procés de Pull Request (PR)
 
@@ -71,12 +72,12 @@ Quan modifiquis `packages/shared`:
 
 ## Resolució de Problemes per a Col·laboradors
 
-* **"Tipus no trobat al Mòbil":** Si has afegit un tipus a `shared` però l'app mòbil no el veu, prova `npm install` a l'arrel i reinicia el servidor Expo.
-* **"Conflicte de ports a Docker":** Si no pots iniciar la base de dades, comprova si tens una altra instància de PostgreSQL executant-se al port `5432`.
+- **"Tipus no trobat al Mòbil":** Si has afegit un tipus a `shared` però l'app mòbil no el veu, prova `npm install` a l'arrel i reinicia el servidor Expo.
+- **"Conflicte de ports a Docker":** Si no pots iniciar la base de dades, comprova si tens una altra instància de PostgreSQL executant-se al port `5432`.
 
 ### **Estat Final del Projecte**
 
 Ara tens un conjunt de documentació de nivell professional:
 
-* **`.context/`**: La "Font de la Veritat" per al teu assistent d'IA.
-* **`docs/`**: Els "Procediments Operatius Estàndard" per al teu equip humà.
+- **`.context/`**: La "Font de la Veritat" per al teu assistent d'IA.
+- **`docs/`**: Els "Procediments Operatius Estàndard" per al teu equip humà.
